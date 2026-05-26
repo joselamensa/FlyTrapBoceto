@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const whatsappMessage = `Hola, soy *${nombre}*. ${mensaje}`;
             const encodedMessage = encodeURIComponent(whatsappMessage);
 
-            window.open(`https://wa.me/+5491136267653?text=${encodedMessage}`, "_blank");
+            window.open(`https://wa.me/+5491167291352?text=${encodedMessage}`, "_blank");
 
             responseElement.textContent = "¡Mensaje enviado con éxito!";
             responseElement.style.color = "#d4af37";
@@ -238,7 +238,7 @@ function setupProductInfoButtons() {
             }
 
             const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/5491136267653?text=${encodedMessage}`, "_blank");
+            window.open(`https://wa.me/5491167291352?text=${encodedMessage}`, "_blank");
         };
 
         button.addEventListener("click", button.clickHandler);
