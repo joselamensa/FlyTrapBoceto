@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Hero Slider
+    setupHeroSlider();
     // Efecto navbar al hacer scroll
     const navbar = document.querySelector(".navbar");
 
@@ -91,12 +93,95 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Scroll suave en cards de Lugares de Aplicación → sección de equipos
+    const equiposSection = document.querySelector("#quien-soy");
+    document.querySelectorAll(".location-card").forEach(card => {
+        card.addEventListener("click", function () {
+            if (equiposSection) {
+                window.scrollTo({
+                    top: equiposSection.offsetTop - 80,
+                    behavior: "smooth"
+                });
+            }
+        });
+    });
+
     // Tabs de productos
     setupProductTabs();
 
     // Configurar funcionalidad de expandir/contraer texto en mobile
     setupExpandableText();
 });
+
+function setupHeroSlider() {
+    const dotsContainer = document.getElementById("heroDots");
+    if (!dotsContainer) return;
+
+    const isMobile = () => window.innerWidth <= 767;
+
+    let currentIndex = 0;
+    let slides = [];
+    let autoInterval;
+
+    function getActiveSlides() {
+        const type = isMobile() ? ".mobile-slide" : ".desktop-slide";
+        return [...document.querySelectorAll(type)];
+    }
+
+    function buildDots(count) {
+        dotsContainer.innerHTML = "";
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement("button");
+            dot.className = "hero-dot" + (i === 0 ? " active" : "");
+            dot.setAttribute("aria-label", `Slide ${i + 1}`);
+            dot.addEventListener("click", () => {
+                goTo(i);
+                resetInterval();
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function goTo(index) {
+        slides[currentIndex].classList.remove("active");
+        dotsContainer.children[currentIndex].classList.remove("active");
+        currentIndex = index;
+        slides[currentIndex].classList.add("active");
+        dotsContainer.children[currentIndex].classList.add("active");
+    }
+
+    function next() {
+        goTo((currentIndex + 1) % slides.length);
+    }
+
+    function resetInterval() {
+        clearInterval(autoInterval);
+        autoInterval = setInterval(next, 4500);
+    }
+
+    function init() {
+        // Ocultar todos los slides primero
+        document.querySelectorAll(".hero-slide").forEach(s => s.classList.remove("active"));
+        currentIndex = 0;
+        slides = getActiveSlides();
+        if (slides.length === 0) return;
+        slides[0].classList.add("active");
+        buildDots(slides.length);
+        resetInterval();
+    }
+
+    init();
+
+    // Reiniciar si cambia entre mobile y desktop
+    let lastMobile = isMobile();
+    window.addEventListener("resize", () => {
+        const nowMobile = isMobile();
+        if (nowMobile !== lastMobile) {
+            lastMobile = nowMobile;
+            init();
+        }
+    });
+}
 
 function setupProductTabs() {
     const tabBtns = document.querySelectorAll(".product-tab-btn");
