@@ -101,6 +101,25 @@ document.addEventListener("DOMContentLoaded", function () {
 function setupProductTabs() {
     const tabBtns = document.querySelectorAll(".product-tab-btn");
     const panels = document.querySelectorAll(".product-panel");
+    const container = document.querySelector(".product-panels");
+
+    // Igualar alturas: medir todos los paneles y fijar el máximo
+    if (container && panels.length > 0) {
+        // Mostrar todos temporalmente (invisibles) para medir
+        panels.forEach(p => {
+            p.style.visibility = "hidden";
+            p.classList.remove("d-none");
+        });
+
+        const maxHeight = Math.max(...[...panels].map(p => p.offsetHeight));
+        container.style.minHeight = maxHeight + "px";
+
+        // Restaurar estado original
+        panels.forEach((p, i) => {
+            p.style.visibility = "";
+            if (i !== 0) p.classList.add("d-none");
+        });
+    }
 
     tabBtns.forEach(btn => {
         btn.addEventListener("click", function () {
